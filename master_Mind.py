@@ -8,8 +8,10 @@ print("MasterMind")
 
 import random
 
-def generate_Code(length=4, digits=6):
-    return [str(random.randint(1, digits)) for _ in range(length)]
+COLORS = ["red", "blue", "yellow", "green", "orange", "purple"]
+
+def generate_Code(length=4):
+    return [random.choice(COLORS) for _ in range(length)]
 
 def get_Feedback(secret, guess):
     black_Pegs = sum(s == g for s, g in zip(secret, guess))
@@ -25,14 +27,15 @@ def get_Feedback(secret, guess):
 
     white_Pegs = sum(min(secret_Counts.get(d, 0), guess_Counts.get(d, 0)) for d in guess_Counts)
     
-    return black_Pegs, white_Pegs
+    return black_Pegs, white_Pegs   
 
 def show_Secret(mystery):
     print(mystery)
 
 def play_Mastermind():
+    print("Available colors are: red, green, blue, yellow, orange, purple")
     print("Welcome to Mastermind!")
-    print("Guess the 4-digit code. Each digit is from 1 to 6. You have 10 attempts.")
+    print("Guess the 4-digit code. You have 10 attempts.")
     secret_Code = generate_Code()
     attempts = 10
 
@@ -40,17 +43,20 @@ def play_Mastermind():
         guess = ""
         valid_Guess = False
         while not valid_Guess:
-            guess = input(f"Attempt {attempt}: ").strip()
-            valid_Guess = len(guess) == 4 and all(c in "123456" for c in guess)
+            guess = input(f"Attempt {attempt}: ").strip().lower().split()
+            if guess == ["cheat"]:
+                show_Secret(secret_Code)
+                continue
+            valid_Guess = len(guess) == 4 and all(c in COLORS for c in guess)
             if not valid_Guess:
-                print("Invalid input. Enter 4 digits, each from 1 to 6.")
-            show_Secret(secret_Code) if guess == "cheat" else False
+                print("Invalid input. Enter 4 colors:", ", ".join(COLORS))
+
 
         black, white = get_Feedback(secret_Code, guess)
         print(f"Black pegs (correct position): {black}, White pegs (wrong position): {white}")
 
         if black == 4:
-            print(f"Congratulations! You guessed the code: {''.join(secret_Code)}")
+            print(f"Congratulations! You guessed the code: {' '.join(secret_Code)}")
             return
 
     print(f"Sorry, you've used all attempts. The correct code was: {''.join(secret_Code)}")
