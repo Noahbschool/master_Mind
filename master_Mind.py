@@ -52,9 +52,10 @@ def play_Mastermind():
         guess = ""
         valid_Guess = False
         while not valid_Guess:
-            guess = input(f"Attempt {attempt}: ").strip().lower().split()
+            guess = input(f"Attempt {attempt}: ").strip().lower()
             if guess == load_Cheat_Key():
                 show_Secret(secret_Code)
+            guess = guess.split()
             valid_Guess = len(guess) == 4 and all(c in COLORS for c in guess)
             if not valid_Guess:
                 print("Invalid input. Enter 4 colors.")
