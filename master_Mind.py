@@ -52,12 +52,12 @@ def play_Mastermind():
         guess = ""
         valid_Guess = False
         while not valid_Guess:
-            guess = input(f"Attempt {attempt}: ").strip()
+            guess = input(f"Attempt {attempt}: ").strip().lower().split()
             if guess == load_Cheat_Key():
                 show_Secret(secret_Code)
-            valid_Guess = len(guess) == 4 and all(c in "123456" for c in guess)
+            valid_Guess = len(guess) == 4 and all(c in COLORS for c in guess)
             if not valid_Guess:
-                print("Invalid input. Enter 4 digits, each from 1 to 6.")
+                print("Invalid input. Enter 4 colors.")
             
 
         black, white = get_Feedback(secret_Code, guess)
@@ -67,7 +67,7 @@ def play_Mastermind():
             print(f"Congratulations! You guessed the code: {' '.join(secret_Code)}")
             return
 
-    print(f"Sorry, you've used all attempts. The correct code was: {''.join(secret_Code)}")
+    print(f"Sorry, you've used all attempts. The correct code was: {' '.join(secret_Code)}")
 
 if __name__ == "__main__":
     again = 'Y'
